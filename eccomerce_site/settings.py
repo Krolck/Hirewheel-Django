@@ -1,3 +1,4 @@
+import os
 """
 Django settings for eccomerce_site project.
 
@@ -66,7 +67,7 @@ ROOT_URLCONF = 'eccomerce_site.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],
+        'DIRS': [BASE_DIR / "templates", os.path.join(BASE_DIR, 'templates', 'allauth')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
