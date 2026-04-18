@@ -1,8 +1,8 @@
-<h1>Welcome to Leo's Eccomerce Site</h1>
+<h1>Leo's Eccomerce Site</h1>
 {% if user.is_authenticated %}
   <h2>Welcome, {{ user.username }}!</h2>
   <p>You are currently logged in.</p>
-  <p><a href="{% url 'account_logout' %}">Log Out</a></p>
+  
 {% else %}
   <h2>You are not logged in</h2>
   <p>Please log in or sign up to access all features.</p>
@@ -15,4 +15,5 @@
     <li><a href="{% url 'account_login' %}">Log In</a></li>
   {% endif %}
   <li><a href="{% url 'account_reset_password' %}">Reset Password</a></li>
+  <li><a href="{% url 'account_logout' %}">Log Out</a></li>
 </ul>
