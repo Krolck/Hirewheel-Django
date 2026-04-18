@@ -1,20 +1,30 @@
-<h1>Leo's Eccomerce Site</h1>
-{% if user.is_authenticated %}
-  <h2>Welcome, {{ user.username }}!</h2>
-  <p>You are currently logged in.</p>
-  
-{% else %}
-  <h2>You are not logged in</h2>
-  <p>Please log in or sign up to access all features.</p>
-{% endif %}
+{% extends "layout.html" %}
+{%load static%}
 
-<h2>Select An Option:</h2>
-<ul>
-  {% if not user.is_authenticated %}
-    <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
-    <li><a href="{% url 'account_login' %}">Log In</a></li>
+{%block title%}
+  <h1>Leo's Eccomerce Site</h1>
+{% endblock %}
+
+{% block content %}
+  {% if user.is_authenticated %}
+    <h2>Welcome, {{ user.username }}!</h2>
+    <p>You are currently logged in.</p>
+    
+  {% else %}
+    <h2>You are not logged in</h2>
+    <p>Please log in or sign up to access all features.</p>
   {% endif %}
-  <li><a href="{% url 'store' %}">Store</a></li>
-  <li><a href="{% url 'account_reset_password' %}">Reset Password</a></li>
-  <li><a href="{% url 'account_logout' %}">Log Out</a></li>
-</ul>
+
+  <h2>Select An Option:</h2>
+  <ul>
+    {% if not user.is_authenticated %}
+      <li><a href="{% url 'account_signup' %}">Sign Up</a></li>
+      <li><a href="{% url 'account_login' %}">Log In</a></li>
+
+    {% else %}
+    <li><a href="/store">Store</a></li>
+    <li><a href="{% url 'account_reset_password' %}">Reset Password</a></li>
+    <li><a href="{% url 'account_logout' %}">Log Out</a></li>
+    {% endif %}
+  </ul>
+{% endblock  %}
