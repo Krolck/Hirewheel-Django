@@ -22,7 +22,7 @@
       <li><a href="{% url 'account_login' %}">Log In</a></li>
 
     {% else %}
-    <li><a href="/store">Store</a></li>
+    {% comment %} <li><a href="/store">Store</a></li> {% endcomment %}
     <li><a href="{% url 'account_reset_password' %}">Reset Password</a></li>
     <li><a href="{% url 'account_logout' %}">Log Out</a></li>
     {% endif %}
