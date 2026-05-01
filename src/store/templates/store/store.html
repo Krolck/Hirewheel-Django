@@ -26,6 +26,7 @@
 </head>
 <body>
   <p>Store</p>
+    <a href="/store/cart">Go to Cart</a>
 
     <div class="grid">
         {% for item in items %}
@@ -34,7 +35,10 @@
                 <h3>{{ item.name }}</h3>
                 <p>${{ item.price }}</p>
                 <p>{{ item.description }}</p>
-                <button>Add To Cart</button>
+                <form action="{% url 'add_to_cart' item.id %}" method="POST">
+                        {% csrf_token %}
+                    <button type="submit" class="btn">Add to Cart</button>
+                </form>
             </div>
         {% endfor %}
     </div>
