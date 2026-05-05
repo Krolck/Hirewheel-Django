@@ -29,3 +29,16 @@ class CartItem(models.Model):
     quantity = models.IntegerField(default=1)
     def __str__(self):
         return f"{self.product.name}"
+    
+
+class Transaction(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        null=False, 
+        blank=True
+    )
+    stripe_session_id = models.CharField(max_length=256, unique=True, null=True, blank=True)
+    amount = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    paid = models.BooleanField(default=False)

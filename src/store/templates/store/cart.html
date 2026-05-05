@@ -28,5 +28,19 @@
 </table>
 
 <h3>Total: ${{ cart.get_total_price }}</h3>
-{% comment %} <a href="{% url 'checkout' %}">Proceed to Checkout</a> {% endcomment %}
+
+{% if request.GET.success%}
+    <p>paid</p>
+{% elif request.GET.canceled%}
+    <p>Canceled</p>
+{% endif %}
+
+<form method='post'>
+    {%csrf_token%}
+    {% for price in prices%}
+        <h3>{{price.product.name}}</h3>
+        <p>{{price.unit_amount}}</p>
+        <button type='submit' name='price_id' value="{{price.id}}">Checkout</button>
+    {% endfor %}
+</form>
 {% endblock %}

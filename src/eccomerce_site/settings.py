@@ -1,4 +1,11 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv(override=True)
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
+STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY")
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
+
 """
 Django settings for eccomerce_site project.
 
@@ -143,3 +150,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+
+STRIPE_PUBLIC_KEY = 'pk_test_...'
+STRIPE_SECRET_KEY = 'sk_test_...'
