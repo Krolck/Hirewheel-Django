@@ -40,7 +40,7 @@
     {% for price in prices%}
         <h3>{{price.product.name}}</h3>
         <p>{{price.unit_amount}}</p>
-        <button type='submit' name='price_id' value="{{price.id}}">Checkout</button>
+        <button type='submit' name='price_id' value="{{price.id}}">Checkout Item</button>
     {% endfor %}
 </form>
 {% endblock %}

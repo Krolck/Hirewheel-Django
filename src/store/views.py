@@ -6,9 +6,11 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 
 import stripe
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
 
 PRICE_IDS = ['price_1TSmKY1173BLi1iPSoZutfH7']
 
@@ -35,39 +37,41 @@ def add_to_cart(request, item_id):
         cart_item.quantity += 1
         cart_item.save()
         
+        
     return redirect('cart')
 
 @login_required
 def cart(request):
-    print(settings.STRIPE_SECRET_KEY)
+    stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
     price_objs = [stripe.Price.retrieve(pid) for pid in PRICE_IDS]
     cart, created = Cart.objects.get_or_create(user=request.user)
+
+
+    if request.method == 'POST':
+        price_id = request.POST.get('price_id')
+        transaction = Transaction.objects.create(
+            user = request.user,
+            stripe_session_id = '',
+            amount = 0, 
+            paid = False
+        )
+        checkout_session = stripe.checkout.Session.create(
+            line_items= [
+                {
+                    'price': price_id,
+                    'quantity': 1 # change later
+                }
+            ],
+            mode = 'payment',
+            success_url = request.build_absolute_uri(reverse('cart') + '?success=1&session_id={CHECKOUT_SESSION_ID}'),
+            cancel_url = request.build_absolute_uri(reverse('cart') + '?canceled=1'),
+            metadata={'product_id': transaction.pk}
+        )
+        transaction.stripe_session_id = checkout_session.id
+        transaction.amount = checkout_session.amount_total
+        transaction.save()
+        return redirect(checkout_session.url, code=303)
+
     return render(request, 'store/cart.html', {'cart': cart, 'prices' : price_objs})
 
-@login_required
-def checkout(request):
 
-
-    price_id = request.POST.get('price_id')
-    transaction = Transaction.objects.create(
-        user = request.user,
-        stripe_session_id = '',
-        amount = 0, 
-        paid = False
-    )
-    checkout_session = stripe.checkout.Session.create(
-        line_items= [
-            {
-                'price': price_id,
-                'quantity': 1 # change later
-            }
-        ],
-        mode = 'payment',
-        success_url = request.build_absolute_uri(reverse('store') + '?success=1&session_id={CHECKOUT_SESSION_ID}'),
-        cancel_url = request.build_absolute_uri(reverse('store') + '?canceled=1'),
-        metadata={'transaction_id': transaction.pk}
-    )
-    transaction.stripe_session_id = checkout_session.id
-    transaction.amount = checkout_session.amount_total
-    transaction.save()
-    return redirect(checkout_session.url, code=303)

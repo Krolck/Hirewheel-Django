@@ -8,7 +8,7 @@ class Item(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return [self.name, self.description, self.date]
+        return self.name
     
 class Cart(models.Model):
     user = models.OneToOneField(
@@ -32,11 +32,10 @@ class CartItem(models.Model):
     
 
 class Transaction(models.Model):
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.CASCADE, 
-        null=False, 
-        blank=True
+        related_name='orders'
     )
     stripe_session_id = models.CharField(max_length=256, unique=True, null=True, blank=True)
     amount = models.IntegerField()
